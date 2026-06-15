@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Детская библиотека — Книжная полка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+        
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .book-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .book-emoji {
+            font-size: 80px;
+            margin: 20px 0;
+        }
+        
+        .book-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .book-author {
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .book-age {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .book-desc {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .order-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            width: 100%;
+        }
+        
+        .order-btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        .modal-content button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .close {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        
+        .contact-form {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .contact-form h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        .contact-form button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 32px; }
+            .books-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Красноярская детская библиотека</h1>
+            <p>✨ Выбери книгу и забери её домой ✨</p>
+        </div>
+        
+        <div class="books-grid">
+            <!-- Книга 1 -->
+            <div class="book-card" onclick="openModal('Приключения Тома Сойера', 'Марк Твен')">
+                <div class="book-emoji">🏃‍♂️📖</div>
+                <div class="book-title">Приключения Тома Сойера</div>
+                <div class="book-author">Марк Твен</div>
+                <div class="book-age">Для детей 8-12 лет</div>
+                <div class="book-desc">Весёлые приключения озорного мальчишки Тома и его друга Гека Финна</div>
+                <button class="order-btn" onclick="event.stopPropagation(); openModal('Приключения Тома Сойера', 'Марк Твен')">📖 Хочу забрать</button>
+            </div>
+            
+            <!-- Книга 2 -->
+            <div class="book-card" onclick="openModal('Маленький принц', 'Антуан де Сент-Экзюпери')">
+                <div class="book-emoji">⭐🦊</div>
+                <div class="book-title">Маленький принц</div>
+                <div class="book-author">Антуан де Сент-Экзюпери</div>
+                <div class="book-age">Для детей 7-99 лет</div>
+                <div class="book-desc">Философская сказка о дружбе, любви и ответственности</div>
+                <button class="order-btn" onclick="event.stopPropagation(); openModal('Маленький принц', 'Антуан де Сент-Экзюпери')">📖 Хочу забрать</button>
+            </div>
+            
+            <!-- Книга 3 -->
+            <div class="book-card" onclick="openModal('Волшебник Изумрудного города', 'Александр Волков')">
+                <div class="book-emoji">👠🐾</div>
+                <div class="book-title">Волшебник Изумрудного города</div>
+                <div class="book-author">Александр Волков</div>
+                <div class="book-age">Для детей 6-10 лет</div>
+                <div class="book-desc">Путешествие девочки Элли и её друзей к великому Гудвину</div>
+                <button class="order-btn" onclick="event.stopPropagation(); openModal('Волшебник Изумрудного города', 'Александр Волков')">📖 Хочу забрать</button>
+            </div>
+            
+            <!-- Книга 4 -->
+            <div class="book-card" onclick="openModal('Гарри Поттер и философский камень', 'Джоан Роулинг')">
+                <div class="book-emoji">⚡🧙‍♂️</div>
+                <div class="book-title">Гарри Поттер и философский камень</div>
+                <div class="book-author">Джоан Роулинг</div>
+                <div class="book-age">Для детей 10-14 лет</div>
+                <div class="book-desc">Мальчик узнаёт, что он волшебник и поступает в Хогвартс</div>
+                <button class="order-btn" onclick="event.stopPropagation(); openModal('Гарри Поттер и философский камень', 'Джоан Роулинг')">📖 Хочу забрать</button>
+            </div>
+            
+            <!-- Книга 5 -->
+            <div class="book-card" onclick="openModal('Винни-Пух', 'Алан Милн')">
+                <div class="book-emoji">🐻🍯</div>
+                <div class="book-title">Винни-Пух</div>
+                <div class="book-author">Алан Милн</div>
+                <div class="book-age">Для детей 4-8 лет</div>
+                <div class="book-desc">Истории о плюшевом медведе и его друзьях из Стоакрового леса</div>
+                <button class="order-btn" onclick="event.stopPropagation(); openModal('Винни-Пух', 'Алан Милн')">📖 Хочу забрать</button>
+            </div>
+            
+            <!-- Книга 6 -->
+            <div class="book-card" onclick="openModal('Незнайка на Луне', 'Николай Носов')">
+                <div class="book-emoji">🚀👽</div>
+                <div class="book-title">Незнайка на Луне</div>
+                <div class="book-author">Николай Носов</div>
+                <div class="book-age">Для детей 7-12 лет</div>
+                <div class="book-desc">Фантастическое путешествие коротышек на Луну</div>
+                <button class="order-btn" onclick="event.stopPropagation(); openModal('Незнайка на Луне', 'Николай Носов')">📖 Хочу забрать</button>
+            </div>
+        </div>
+        
+        <!-- Форма обратной связи для библиотеки -->
+        <div class="contact-form">
+            <h3>📝 Есть вопрос или предложение?</h3>
+            <form action="https://formsubmit.co/zixicsone@yandex.ru" method="POST">
+                <input type="text" name="name" placeholder="Ваше имя" required>
+                <input type="email" name="email" placeholder="Ваш email" required>
+                <textarea name="message" rows="3" placeholder="Ваше сообщение..." required></textarea>
+                <button type="submit">📩 Отправить библиотекарю</button>
+            </form>
+            <p style="font-size: 12px; color: #999; margin-top: 15px;">🔒 Нажимая кнопку, вы соглашаетесь на обработку данных</p>
+        </div>
+        
+        <div class="footer">
+            <p>© Красноярская краевая детская библиотека | Режим работы: Пн-Сб 9:00-18:00</p>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для записи на книгу -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>📖 Запись на книгу</h3>
+            <p id="bookInfo"></p>
+            <form action="https://formsubmit.co/zixicsone@yandex.ru" method="POST">
+                <input type="hidden" name="book_title" id="bookTitle">
+                <input type="text" name="name" placeholder="Ваше имя" required>
+                <input type="tel" name="phone" placeholder="Номер телефона" required>
+                <input type="text" name="child_age" placeholder="Возраст ребёнка">
+                <button type="submit">✅ Отправить заявку</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function openModal(bookTitle, bookAuthor) {
+            document.getElementById('bookInfo').innerHTML = `<strong>${bookTitle}</strong><br>${bookAuthor}`;
+            document.getElementById('bookTitle').value = `${bookTitle} - ${bookAuthor}`;
+            document.getElementById('bookModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('bookModal').style.display = 'none';
+        }
+        
+        // Закрытие по клику вне окна
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('bookModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
